@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Andrey O.</Authors>
+    <Company>Andrey O.</Company>
+    <Description>Integrates OpenTelemetry tracing into MyLab.RabbitClient</Description>
+    <Copyright>Copyright (c) 2021 Andrey Osintsev &lt;ozzy.ext@gmail.com&gt;</Copyright>
+    <PackageProjectUrl>https://github.com/mylab-monitoring/rabbit-tracing</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mylab-monitoring/rabbit-tracing.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>monitoring.png</PackageIcon>
+    <PackageIconUrl />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\MyLab.RabbitTrace.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>.\MyLab.RabbitTrace.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MyLab.RabbitClient" Version="2.4.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="monitoring.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
