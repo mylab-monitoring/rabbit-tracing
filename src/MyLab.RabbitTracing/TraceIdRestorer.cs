@@ -4,12 +4,8 @@ using RabbitMQ.Client.Events;
 
 namespace MyLab.RabbitTracing
 {
-    /// <summary>
-    /// Applies trace id from consumed message
-    /// </summary>
-    public class TraceIdRestorer : IConsumedMessageProcessor
+    class TraceIdRestorer : IConsumedMessageProcessor
     {
-        /// <inheritdoc />
         public void Process(BasicDeliverEventArgs deliverEventArgs)
         {
             throw new NotImplementedException();
