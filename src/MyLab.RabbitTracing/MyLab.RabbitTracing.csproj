@@ -11,6 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageIcon>monitoring.png</PackageIcon>
     <PackageIconUrl />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
