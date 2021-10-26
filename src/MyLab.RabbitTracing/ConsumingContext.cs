@@ -51,7 +51,7 @@ namespace MyLab.RabbitTracing
 			//   * https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/messaging.md#messaging-attributes
 			//   * https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/messaging.md#rabbitmq
 			activity?.SetTag("messaging.system", "rabbitmq");
-			activity?.SetTag("messaging.destination_kind", string.IsNullOrWhiteSpace(ea.Exchange) ? "queue": "topic");
+			activity?.SetTag("messaging.destination_kind", string.IsNullOrWhiteSpace(ea.Exchange) ? "queue" : "topic");
 			activity?.SetTag("messaging.destination", ea.Exchange);
 			activity?.SetTag("messaging.rabbitmq.routing_key", ea.RoutingKey);
 		}
@@ -60,7 +60,7 @@ namespace MyLab.RabbitTracing
 		{
 			try
 			{
-				if (props.Headers.TryGetValue(key, out var value))
+				if (props.Headers != null && props.Headers.TryGetValue(key, out var value))
 				{
 					var bytes = value as byte[];
 					return new[] { Encoding.UTF8.GetString(bytes) };

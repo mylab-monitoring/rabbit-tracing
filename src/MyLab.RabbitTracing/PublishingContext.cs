@@ -46,7 +46,8 @@ namespace MyLab.RabbitTracing
 			// https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/messaging.md#span-name
 			var destination = string.IsNullOrWhiteSpace(publishingMessage.Exchange) ? publishingMessage.RoutingKey : publishingMessage.Exchange;
 			var activityName = $"{(string.IsNullOrWhiteSpace(destination) ? "queue": destination)} send";
-			var activity = ActivitySource.StartActivity(activityName, ActivityKind.Producer);
+			var parentContext = Activity.Current != null ? Activity.Current.Context: default(ActivityContext);
+			var activity = ActivitySource.StartActivity(activityName, ActivityKind.Producer, parentContext: parentContext);
 			ActivityContext contextToInject = default;
 			if (activity != null)
 			{

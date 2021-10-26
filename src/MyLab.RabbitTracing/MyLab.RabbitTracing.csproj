@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MyLab.RabbitClient" Version="2.4.11" />
+    <PackageReference Include="MyLab.RabbitClient" Version="2.4.12" />
     <PackageReference Include="OpenTelemetry" Version="1.2.0-beta1" />
   </ItemGroup>
 
