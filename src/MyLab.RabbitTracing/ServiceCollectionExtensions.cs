@@ -17,8 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
             if (srv == null) throw new ArgumentNullException(nameof(srv));
 
             return srv
-                .AddRabbitConsumedMessageProcessor<TraceIdRestorer>()
-                .AddRabbitPublishingMessageProcessor<TraceIdInjector>();
+                .AddRabbitConsumingContext<ConsumingContext>()
+                .AddRabbitPublishingContext<PublishingContext>();
         }
     }
 }

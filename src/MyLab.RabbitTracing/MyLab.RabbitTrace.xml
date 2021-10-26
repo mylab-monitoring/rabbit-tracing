@@ -14,21 +14,5 @@
             Adds supporting for OpenTelemetry tracing
             </summary>
         </member>
-        <member name="T:MyLab.RabbitTracing.TraceIdConsumedMessageProcessor">
-            <summary>
-            Applies trace id from consumed message
-            </summary>
-        </member>
-        <member name="M:MyLab.RabbitTracing.TraceIdConsumedMessageProcessor.Process(RabbitMQ.Client.Events.BasicDeliverEventArgs)">
-            <inheritdoc />
-        </member>
-        <member name="T:MyLab.RabbitTracing.TraceIdPublishingMessageProcessor">
-            <summary>
-            Adds trace id into publishing message
-            </summary>
-        </member>
-        <member name="M:MyLab.RabbitTracing.TraceIdPublishingMessageProcessor.Process(RabbitMQ.Client.IBasicProperties,System.Byte[]@)">
-            <inheritdoc />
-        </member>
     </members>
 </doc>
