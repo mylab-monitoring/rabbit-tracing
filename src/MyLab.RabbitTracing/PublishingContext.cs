@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 using Microsoft.Extensions.Logging;
-using MyLab.Log.Dsl;
 using MyLab.RabbitClient.Publishing;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
@@ -19,7 +17,7 @@ namespace MyLab.RabbitTracing
 			_logger = logger;
 		}
 
-		private static readonly ActivitySource ActivitySource = new ActivitySource("MessagePublisher");
+		private static readonly ActivitySource ActivitySource = new ActivitySource(Assembly.GetEntryAssembly().GetName().Name);
 		private static readonly TextMapPropagator Propagator = Propagators.DefaultTextMapPropagator;
 		private readonly ILogger<PublishingContext> _logger;
 
