@@ -14,5 +14,15 @@
             Adds supporting for OpenTelemetry tracing
             </summary>
         </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.TraceProviderBuilderExstensions">
+            <summary>
+            Extensions for <see cref="T:OpenTelemetry.Trace.TracerProviderBuilder"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.TraceProviderBuilderExstensions.AddRabbitSource(OpenTelemetry.Trace.TracerProviderBuilder)">
+            <summary>
+            Adds RabbitMq source for tracing
+            </summary>
+        </member>
     </members>
 </doc>

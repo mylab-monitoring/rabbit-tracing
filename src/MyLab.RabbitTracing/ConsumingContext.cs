@@ -2,16 +2,29 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using MyLab.RabbitClient.Consuming;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
+using OpenTelemetry.Trace;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace MyLab.RabbitTracing
 {
+	class MessageHandlingContext : IDisposable
+	{
+		public TracerProvider TracerProvider { get; set; }
+		public Activity Activity { get; set; }
+
+		public void Dispose()
+		{
+			Activity?.Dispose();
+			TracerProvider?.Dispose();
+		}
+	}
 	class ConsumingContext : IConsumingContext
 	{
 		public ConsumingContext(ILogger<ConsumingContext> logger)
@@ -19,7 +32,7 @@ namespace MyLab.RabbitTracing
 			_logger = logger;
 		}
 
-		private static readonly ActivitySource ActivitySource = new ActivitySource("MessageReceiver");
+		private static readonly ActivitySource ActivitySource = new ActivitySource(Assembly.GetEntryAssembly().GetName().Name);
 		private static readonly TextMapPropagator Propagator = new TraceContextPropagator();
 		private readonly ILogger<ConsumingContext> _logger;
 
@@ -29,7 +42,9 @@ namespace MyLab.RabbitTracing
 			var parentContext = Propagator.Extract(default, deliverEventArgs.BasicProperties, ExtractTraceContextFromBasicProperties);
 			Baggage.Current = parentContext.Baggage;
 
-			var activityName = $"{deliverEventArgs.RoutingKey} receive";
+			var destination = string.IsNullOrWhiteSpace(deliverEventArgs.Exchange) ? deliverEventArgs.RoutingKey : deliverEventArgs.Exchange;
+
+			var activityName = $"{(string.IsNullOrWhiteSpace(destination) ? "queue" : destination)} receive";
 
 			// Start an activity with a name following the semantic convention of the OpenTelemetry messaging specification.
 			// https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/messaging.md#span-name
