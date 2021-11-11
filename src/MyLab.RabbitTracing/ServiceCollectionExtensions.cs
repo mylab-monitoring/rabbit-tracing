@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (srv == null) throw new ArgumentNullException(nameof(srv));
 
             return srv
-                .AddRabbitConsumingContext<ConsumingContext>()
+                .AddRabbitCtx<ConsumingContext>()
                 .AddRabbitPublishingContext<PublishingContext>();
         }
     }
