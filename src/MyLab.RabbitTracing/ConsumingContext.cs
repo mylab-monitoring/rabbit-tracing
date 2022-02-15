@@ -8,23 +8,11 @@ using Microsoft.Extensions.Logging;
 using MyLab.RabbitClient.Consuming;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
-using OpenTelemetry.Trace;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace MyLab.RabbitTracing
 {
-	class MessageHandlingContext : IDisposable
-	{
-		public TracerProvider TracerProvider { get; set; }
-		public Activity Activity { get; set; }
-
-		public void Dispose()
-		{
-			Activity?.Dispose();
-			TracerProvider?.Dispose();
-		}
-	}
 	class ConsumingContext : IConsumingContext
 	{
 		public ConsumingContext(ILogger<ConsumingContext> logger)
@@ -56,7 +44,16 @@ namespace MyLab.RabbitTracing
 			// The OpenTelemetry messaging specification defines a number of attributes. These attributes are added here.
 			AddMessagingTags(activity, deliverEventArgs);
 
-			return activity;
+			return new ContextValue(activity, CreateLogScope(_logger, activity));
+		}
+
+		private IDisposable CreateLogScope(ILogger logger, Activity activity)
+		{
+			var dic = new Dictionary<string, object>
+			{
+				{ "TraceId", activity.TraceId.ToHexString() }
+			};
+			return logger.BeginScope(dic);
 		}
 
 		public static void AddMessagingTags(Activity activity, BasicDeliverEventArgs ea)
@@ -85,8 +82,26 @@ namespace MyLab.RabbitTracing
 			{
 				_logger.LogError(ex, "Failed to extract trace context: {ex}");
 			}
-
+			
 			return Enumerable.Empty<string>();
+		}
+
+		public class ContextValue : IDisposable
+		{
+			private readonly Activity _activity;
+			private readonly IDisposable _logScope;
+
+			public ContextValue(Activity activity, IDisposable logScope)
+			{
+				_activity = activity;
+				_logScope = logScope;
+			}
+
+			public void Dispose()
+			{
+				_activity?.Dispose();
+				_logScope?.Dispose();
+			}
 		}
 	}
 }
