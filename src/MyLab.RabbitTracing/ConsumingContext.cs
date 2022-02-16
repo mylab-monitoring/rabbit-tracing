@@ -25,7 +25,7 @@ namespace MyLab.RabbitTracing
 		private readonly ILogger<ConsumingContext> _logger;
 
 
-		public IDisposable Set(BasicDeliverEventArgs deliverEventArgs)
+		public IConsumingContextInstance Set(BasicDeliverEventArgs deliverEventArgs)
 		{
 			var parentContext = Propagator.Extract(default, deliverEventArgs.BasicProperties, ExtractTraceContextFromBasicProperties);
 			Baggage.Current = parentContext.Baggage;
@@ -44,7 +44,7 @@ namespace MyLab.RabbitTracing
 			// The OpenTelemetry messaging specification defines a number of attributes. These attributes are added here.
 			AddMessagingTags(activity, deliverEventArgs);
 
-			return new ContextValue(activity, CreateLogScope(_logger, activity));
+			return new ConsumingContextInstance(activity, CreateLogScope(_logger, activity));
 		}
 
 		private IDisposable CreateLogScope(ILogger logger, Activity activity)
@@ -86,12 +86,13 @@ namespace MyLab.RabbitTracing
 			return Enumerable.Empty<string>();
 		}
 
-		public class ContextValue : IDisposable
+
+		public class ConsumingContextInstance : IConsumingContextInstance
 		{
 			private readonly Activity _activity;
 			private readonly IDisposable _logScope;
 
-			public ContextValue(Activity activity, IDisposable logScope)
+			public ConsumingContextInstance(Activity activity, IDisposable logScope)
 			{
 				_activity = activity;
 				_logScope = logScope;
@@ -101,6 +102,11 @@ namespace MyLab.RabbitTracing
 			{
 				_activity?.Dispose();
 				_logScope?.Dispose();
+			}
+
+			public void NotifyUnhandledException(Exception exception)
+			{
+				_activity?.SetTag("error", true);
 			}
 		}
 	}

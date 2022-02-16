@@ -12,7 +12,7 @@
     <PackageIcon>monitoring.png</PackageIcon>
     <PackageIconUrl />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.2</Version>
+    <Version>1.1.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MyLab.RabbitClient" Version="2.5.13" />
+    <PackageReference Include="MyLab.RabbitClient" Version="2.7.13" />
     <PackageReference Include="OpenTelemetry" Version="1.2.0-beta1" />
   </ItemGroup>
 
