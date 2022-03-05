@@ -51,7 +51,7 @@ namespace MyLab.RabbitTracing
 		{
 			var dic = new Dictionary<string, object>
 			{
-				{ "TraceId", activity.TraceId.ToHexString() }
+				{ "TraceId", activity?.TraceId.ToHexString() }
 			};
 			return logger.BeginScope(dic);
 		}
